@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="table_component" role="region" tabindex="0">
+    <table>
+        <caption>User List</caption>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>SecondName</th>
+            <th>Email</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="user : ${userList}">
+            <tr>
+                <td th:text="${user.getId()}"></td>
+                <td th:text="${user.getName()}"></td>
+                <td th:text="${user.getLastname()}"></td>
+                <td th:text="${user.getEmail()}"></td>
+                <td><a th:href="@{'/editUser?id=' + ${user.getId()}}">Edit</a></td>
+                <td><a th:href="@{'/api/users/delete?id=' + ${user.getId()}}">Delete</a></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <a href="/createUser">Create User</a>
+</div>
+
+<style>
+    .table_component {
+    overflow: auto;
+    width: 100%;
+    padding: 10px;
+}
+
+.table_component table {
+    border: 1px solid #dededf;
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 1px;
+    text-align: left;
+}
+
+.table_component caption {
+    caption-side: top;
+    text-align: left;
+    font-size: x-large;
+    margin-bottom: 10px;
+
+}
+
+.table_component th {
+    border: 1px solid #dededf;
+    background-color: #eceff1;
+    color: #000000;
+    padding: 5px;
+}
+
+.table_component td {
+    border: 1px solid #dededf;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 5px;
+}
+</style>
+</body>
+</html>
