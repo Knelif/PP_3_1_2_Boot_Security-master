@@ -1,13 +1,30 @@
 package ru.kata.spring.boot_security.demo.web.controller.view;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.dal.model.User;
+import ru.kata.spring.boot_security.demo.dal.repositories.UserRepository;
 
-public interface UserViewController {
-    String getViewUserListPage(ModelMap model);
+import java.security.Principal;
 
-    String getCreateUserPage(User user);
+@Controller
+@RequestMapping("/user")
+public class UserViewController {
+    private final UserRepository userRepository;
 
-    String getEditUserPage(ModelMap model, Long Id);
+    @Autowired
+    public UserViewController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping
+    public String getAboutUserPage(ModelMap modelMap, Principal principal) {
+        User user = userRepository.findByEmail(principal.getName());
+        modelMap.addAttribute("user", user);
+        return "user/aboutUser";
+    }
 }

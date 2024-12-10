@@ -12,15 +12,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "role")
-@NoArgsConstructor
-public class Role {
+public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -29,7 +30,7 @@ public class Role {
     @Column(name = "name", unique = true)
     @NotNull
     //TODO: Think about using role.name as primary key
-    @Size(min = 2, max = 255, message = "The role name must be between 2 and 255 characters and be unique.")
+    @Size(min = 3, max = 255, message = "The role's name must be between 3 and 255 characters and be unique.")
     private String name;
 
     public Role(String name) {
@@ -47,5 +48,15 @@ public class Role {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getName());
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    @Override
+    public String getAuthority() {
+        return getName();
     }
 }

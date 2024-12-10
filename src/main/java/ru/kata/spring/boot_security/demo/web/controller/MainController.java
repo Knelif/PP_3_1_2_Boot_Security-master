@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.kata.spring.boot_security.demo.web.controller.view.UserViewController;
+import ru.kata.spring.boot_security.demo.web.controller.view.AdministratorViewController;
 
 @Controller
 public class MainController {
-    private final UserViewController userView;
+    private final AdministratorViewController userView;
 
     @Autowired
-    public MainController(UserViewController userView) {
+    public MainController(AdministratorViewController userView) {
         this.userView = userView;
     }
 

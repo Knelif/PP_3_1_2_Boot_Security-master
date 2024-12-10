@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.kata.spring.boot_security.demo.dal.model.Role;
 import ru.kata.spring.boot_security.demo.dal.model.User;
+import ru.kata.spring.boot_security.demo.dal.repositories.RoleRepository;
+import ru.kata.spring.boot_security.demo.dal.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.dal.service.UserService;
 
 import java.util.List;
@@ -19,25 +22,27 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/users/")
 public class UserAPIControllerImpl implements UserAPIController {
-    private final UserService userService;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private static final String DEFAULT_PAGE = "redirect:/";
     private static final String CREATE_USER_PAGE = "user/createUser";
     private static final String UPDATE_USER_PAGE = "user/editUser";
     private static final String ERROR_API_PAGE = "redirect:/apiError";
 
     @Autowired
-    public UserAPIControllerImpl(UserService userService) {
-        this.userService = userService;
+    public UserAPIControllerImpl(UserRepository userService, RoleRepository roleRepository) {
+        this.userRepository = userService;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public List<User> getUserList() {
-        return userService.getUserList();
+        return userRepository.findAll();
     }
 
     @Override
     public User getUserByID(Long id) {
-        return userService.getUserById(id);
+        return userRepository.getReferenceById(id);
     }
 
 
@@ -51,7 +56,7 @@ public class UserAPIControllerImpl implements UserAPIController {
             redirectAttributes.addFlashAttribute("user", user);
             return CREATE_USER_PAGE;
         }
-        userService.saveUser(user);
+        userRepository.save(user);
         return DEFAULT_PAGE;
     }
 
@@ -65,15 +70,20 @@ public class UserAPIControllerImpl implements UserAPIController {
             redirectAttributes.addFlashAttribute("user", user);
             return UPDATE_USER_PAGE;
         }
-        userService.updateUser(user);
+        userRepository.save(user);
         return DEFAULT_PAGE;
     }
 
     @Override
     @GetMapping(value = "delete")
     public String deleteUser(@RequestParam(defaultValue = "-1") Long id) {
-        userService.deleteUserById(id);
+        userRepository.deleteById(id);
         return DEFAULT_PAGE;
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 
 }

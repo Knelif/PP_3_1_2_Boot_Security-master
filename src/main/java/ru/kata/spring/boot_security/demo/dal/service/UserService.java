@@ -13,6 +13,8 @@ public interface UserService {
 
     User getUserById(Long id) throws EntityNotFoundException;
 
+    User getUserByEmail(String Email) throws EntityNotFoundException;
+
     List<User> getUserList();
 
     void deleteUserById(Long id) throws EntityNotFoundException;

@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.dal.service;
 
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         return userDAO.getUserById(id);
+    }
+
+    @Override
+    public User getUserByEmail(String Email) throws EntityNotFoundException {
+        return userDAO.getUserByEmail(Email);
     }
 
     @Transactional(readOnly = true)

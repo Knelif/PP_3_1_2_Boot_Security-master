@@ -3,41 +3,47 @@ package ru.kata.spring.boot_security.demo.web.controller.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.web.controller.api.UserAPIController;
 
 
 @Controller
-public class UserViewControllerImpl implements UserViewController {
+@RequestMapping("/admin")
+public class AdministratorViewController {
     private final UserAPIController userAPI;
 
     @Autowired
-    public UserViewControllerImpl(UserAPIController userAPI) {
+    public AdministratorViewController(UserAPIController userAPI) {
         this.userAPI = userAPI;
     }
 
-    @Override
-    @GetMapping(value = "userList")
+
+    @GetMapping(value = "")
     public String getViewUserListPage(ModelMap modelMap) {
         modelMap.addAttribute("userList", userAPI.getUserList());
-        return "user/allUsers";
+        return "admin/allUsers";
     }
 
-    @Override
-    @GetMapping(value = "createUser")
+
+
+    @GetMapping(value = "/createUser")
     public String getCreateUserPage(@ModelAttribute("user") User user) {
         if (user == null) user = new User();
-        return "user/createUser";
+        return "admin/createUser";
     }
 
-    @Override
-    @GetMapping(value = "editUser")
+
+    @GetMapping(value = "/editUser")
     public String getEditUserPage(ModelMap modelMap, @RequestParam(defaultValue = "-1") Long id) {
         if (!modelMap.containsAttribute("user")) modelMap.addAttribute("user", userAPI.getUserByID(id));
-        return "user/editUser";
+        System.out.println(modelMap.getAttribute("user"));
+        modelMap.addAttribute("roles", userAPI.getAllRoles());
+        return "admin/editUser";
     }
 }
