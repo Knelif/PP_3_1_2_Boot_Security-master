@@ -3,10 +3,9 @@ package ru.kata.spring.boot_security.demo.web.controller.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.dal.model.User;
@@ -31,19 +30,20 @@ public class AdministratorViewController {
     }
 
 
-
     @GetMapping(value = "/createUser")
-    public String getCreateUserPage(@ModelAttribute("user") User user) {
-        if (user == null) user = new User();
+    public String getCreateUserPage(Model model) {
+        if (!model.containsAttribute("user")) model.addAttribute("user", new User());
+        model.addAttribute("roles", userAPI.getAllRoles());
+        System.out.println(model);
         return "admin/createUser";
     }
 
 
     @GetMapping(value = "/editUser")
-    public String getEditUserPage(ModelMap modelMap, @RequestParam(defaultValue = "-1") Long id) {
-        if (!modelMap.containsAttribute("user")) modelMap.addAttribute("user", userAPI.getUserByID(id));
-        System.out.println(modelMap.getAttribute("user"));
-        modelMap.addAttribute("roles", userAPI.getAllRoles());
+    public String getEditUserPage(Model model,
+                                  @RequestParam(defaultValue = "-1") Long id) {
+        if (!model.containsAttribute("user")) model.addAttribute("user", userAPI.getUserByID(id));
+        model.addAttribute("roles", userAPI.getAllRoles());
         return "admin/editUser";
     }
 }

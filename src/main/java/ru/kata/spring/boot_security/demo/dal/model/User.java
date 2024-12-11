@@ -19,7 +19,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -44,16 +43,15 @@ public class User implements UserDetails {
     @Email(message = "Wrong email")
     private String email;
 
-    // TODO: Entity attributes for age
     private Byte age;
 
-    // TODO: Entity attributes for password
     @NotEmpty(message = "Password can't be empty")
     @Size(min = 2, message = "Password must contain more than 2 characters")
     private String password;
 
-    // TODO: Entity attributes for roles
-    @ManyToMany (fetch = FetchType.EAGER)
+
+    @NotEmpty(message = "Select one or more role")
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -89,5 +87,18 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return getEmail();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

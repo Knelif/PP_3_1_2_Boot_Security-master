@@ -34,11 +34,9 @@
         </tr>
         <tr>
             <td><label for="password">Password</label></td>
-            <td><input type="password" name="password" id="password" th:field="*{password}"></td>
+            <td><input type="password" name="password" id="password" th:value="${user.getPassword()}"></td>
             <td style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
         </tr>
-
-
         <tr>
             <td><label>Role</label></td>
             <td>
@@ -52,6 +50,7 @@
         </tr>
         <tr>
             <td colspan="2">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
                 <button type="submit" value="Save">Save </button>
             </td>
         </tr>

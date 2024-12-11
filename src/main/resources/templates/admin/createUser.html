@@ -5,41 +5,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h1>Add new user</h1>
-<form action="/api/users/create" method="POST" th:object="${user}">
-    <table>
-        <tr>
-            <td><label for="name">Name</label></td>
-            <td><input type="text" name="name" id="name" th:field="*{name} "></td>
-            <td style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></td>
-        </tr>
-        <tr>
-            <td><label for="name">Lastname</label></td>
-            <td><input type="text" name="last-name" id="last-name" th:field="*{lastname}"></td>
-            <td style="color:red" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></td>
-        </tr>
-        <tr>
-            <td><label for="age">Age</label></td>
-            <td><input type="text" name="age" id="age" th:field="*{age}"></td>
-            <td style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></td>
-        </tr>
-        <tr>
-            <td><label for="email">Email</label></td>
-            <td><input type="email" name="email" id="email" th:field="*{email}"></td>
-            <td style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></td>
-        </tr>
-        <tr>
-            <td><label for="password">Password</label></td>
-            <td><input type="password" name="password" id="password" th:field="*{password}"></td>
-            <td style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="Add new user"></td>
-        </tr>
-    </table>
-</form>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <h3>Add new user</h3>
+    </div>
+    <div class="row justify-content-md-center">
+        <form action="/api/users/create" method="POST" th:object="${user}">
+            <input type="hidden" name="_method" value="POST">
+
+
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" th:field="*{name}" class="form-control" placeholder="Name">
+                <p style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
+                <label for="name">Lastname</label>
+                <input type="text" name="last-name" id="last-name" th:field="*{lastname}" class="form-control" placeholder="Lastname">
+                <p style="color:red" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></p>
+
+
+                <label for="age">Age</label>
+                <input type="text" name="age" id="age" th:field="*{age}" class="form-control" placeholder="Age">
+                <p style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></p>
+
+
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" th:field="*{email}" class="form-control" placeholder="Email">
+                <p style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+
+
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" th:value="*{password}" class="form-control" placeholder="Password">
+                <p style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
+
+                <label for="role">Role</label>
+                <select multiple="multiple" th:field="*{role}" class="form-control" size="2">
+                    <option th:each="role : ${roles}"
+                            th:value="${role.getId()}"
+                            th:text="${role.getName()}"
+                            th:selected="${user.role != null}? ${user.role.contains(role)}"></option>
+                </select>
+                <p style="color:red" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></p>
+
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-success">Add new user</button>
+
+        </form>
+    </div>
+</div>
 </body>
 </html>

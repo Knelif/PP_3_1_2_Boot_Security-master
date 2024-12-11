@@ -4,6 +4,7 @@ package ru.kata.spring.boot_security.demo.web.controller.api;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kata.spring.boot_security.demo.dal.model.Role;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.dal.repositories.RoleRepository;
-import ru.kata.spring.boot_security.demo.dal.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.dal.service.UserService;
 
 import java.util.List;
@@ -22,27 +22,27 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/users/")
 public class UserAPIControllerImpl implements UserAPIController {
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final RoleRepository roleRepository;
     private static final String DEFAULT_PAGE = "redirect:/";
-    private static final String CREATE_USER_PAGE = "user/createUser";
-    private static final String UPDATE_USER_PAGE = "user/editUser";
+    private static final String CREATE_USER_PAGE = "redirect:/admin/createUser";
+    private static final String UPDATE_USER_PAGE = "redirect:/admin/editUser";
     private static final String ERROR_API_PAGE = "redirect:/apiError";
 
     @Autowired
-    public UserAPIControllerImpl(UserRepository userService, RoleRepository roleRepository) {
-        this.userRepository = userService;
+    public UserAPIControllerImpl(UserService userService, RoleRepository roleRepository) {
+        this.userService = userService;
         this.roleRepository = roleRepository;
     }
 
     @Override
     public List<User> getUserList() {
-        return userRepository.findAll();
+        return userService.getUserList();
     }
 
     @Override
     public User getUserByID(Long id) {
-        return userRepository.getReferenceById(id);
+        return userService.getUserById(id);
     }
 
 
@@ -52,11 +52,11 @@ public class UserAPIControllerImpl implements UserAPIController {
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", bindingResult);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
             redirectAttributes.addFlashAttribute("user", user);
             return CREATE_USER_PAGE;
         }
-        userRepository.save(user);
+        userService.saveUser(user);
         return DEFAULT_PAGE;
     }
 
@@ -66,18 +66,18 @@ public class UserAPIControllerImpl implements UserAPIController {
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", bindingResult);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
             redirectAttributes.addFlashAttribute("user", user);
-            return UPDATE_USER_PAGE;
+            return String.format("%s?id=%d", UPDATE_USER_PAGE, user.getId());
         }
-        userRepository.save(user);
+        userService.updateUser(user);
         return DEFAULT_PAGE;
     }
 
     @Override
     @GetMapping(value = "delete")
     public String deleteUser(@RequestParam(defaultValue = "-1") Long id) {
-        userRepository.deleteById(id);
+        userService.deleteUserById(id);
         return DEFAULT_PAGE;
     }
 

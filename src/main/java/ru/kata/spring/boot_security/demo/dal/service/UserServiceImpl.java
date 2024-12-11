@@ -3,6 +3,10 @@ package ru.kata.spring.boot_security.demo.dal.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dal.dao.UserDAO;
@@ -13,7 +17,9 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserDAO userDAO;
+    private PasswordEncoder passwordEncoder;
+
+    private final UserDAO userDAO;
 
     @Autowired
     public UserServiceImpl(UserDAO userDAO) {
@@ -22,14 +28,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void saveUser(User newUser) {
-        userDAO.saveUser(newUser);
+    public void saveUser(User user) {
+        encodePassword(user);
+        userDAO.saveUser(user);
     }
 
     @Transactional
     @Override
-    public void updateUser(User newUser) {
-        userDAO.updateUser(newUser);
+    public void updateUser(User user) {
+        encodePassword(user);
+        userDAO.updateUser(user);
     }
 
     @Override
@@ -52,5 +60,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(Long id) {
         userDAO.deleteUserById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userDAO.getUserByEmail(username);
+    }
+
+    @Autowired
+    @Lazy
+    public void setPasswordEncoder(PasswordEncoder pe) {
+        passwordEncoder = pe;
+    }
+
+    private User encodePassword(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return user;
     }
 }
