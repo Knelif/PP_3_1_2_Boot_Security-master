@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.web.wrappers;
 
+import ru.kata.spring.boot_security.demo.dal.model.Role;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 
 import java.util.stream.Collectors;
@@ -10,7 +11,7 @@ public class UserWrapper {
 
     private UserWrapper(User user) {
         this.user = user;
-        role = user.getRole().stream().map(role -> role.getName().replace("ROLE_", "")).collect(Collectors.joining(" "));
+        role = user.getRole().stream().map(Role::toString).collect(Collectors.joining(" "));
     }
 
     public static UserWrapper of(User user) {

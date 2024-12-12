@@ -28,7 +28,6 @@ public class UserAPIControllerImpl implements UserAPIController {
     private static final String DEFAULT_PAGE = "redirect:/";
     private static final String CREATE_USER_PAGE = "redirect:/admin/createUser";
     private static final String UPDATE_USER_PAGE = "redirect:/admin/editUser";
-    private static final String ERROR_API_PAGE = "redirect:/apiError";
 
     @Autowired
     public UserAPIControllerImpl(UserService userService, RoleRepository roleRepository, UserValidator userValidator) {

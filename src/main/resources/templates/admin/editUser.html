@@ -60,7 +60,7 @@
                 <select multiple="multiple" th:field="*{role}" class="form-control" size="2">
                     <option th:each="role : ${roles}"
                             th:value="${role.getId()}"
-                            th:text="${role.getName()}"
+                            th:text="${role}"
                             th:selected="${user.role != null}? ${user.role.contains(role)}"></option>
                 </select>
                 <div class="badge badge-danger mt-1" role="alert" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
