@@ -4,17 +4,17 @@ import ru.kata.spring.boot_security.demo.dal.model.User;
 
 import java.util.stream.Collectors;
 
-public class UserDecorator {
+public class UserWrapper {
     private final User user;
     private String role;
 
-    private UserDecorator(User user) {
+    private UserWrapper(User user) {
         this.user = user;
         role = user.getRole().stream().map(role -> role.getName().replace("ROLE_", "")).collect(Collectors.joining(" "));
     }
 
-    public static UserDecorator of(User user) {
-        return new UserDecorator(user);
+    public static UserWrapper of(User user) {
+        return new UserWrapper(user);
     }
     public Long getId() {
         return user.getId();
