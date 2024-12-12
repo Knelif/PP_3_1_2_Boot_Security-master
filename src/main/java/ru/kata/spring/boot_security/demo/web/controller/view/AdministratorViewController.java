@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.web.controller.api.UserAPIController;
-import ru.kata.spring.boot_security.demo.web.decorators.UserWrapper;
+import ru.kata.spring.boot_security.demo.web.wrappers.UserWrapper;
 
 import java.security.Principal;
 import java.util.stream.Collectors;

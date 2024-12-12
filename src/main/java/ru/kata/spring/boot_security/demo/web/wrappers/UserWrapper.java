@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.web.decorators;
+package ru.kata.spring.boot_security.demo.web.wrappers;
 
 import ru.kata.spring.boot_security.demo.dal.model.User;
 

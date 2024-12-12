@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.web.controller.api.UserAPIController;
-import ru.kata.spring.boot_security.demo.web.decorators.UserWrapper;
+import ru.kata.spring.boot_security.demo.web.wrappers.UserWrapper;
 
 import java.security.Principal;
 
