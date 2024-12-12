@@ -45,6 +45,11 @@ public class UserAPIControllerImpl implements UserAPIController {
         return userService.getUserById(id);
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        return userService.getUserByEmail(email);
+    }
+
 
     @Override
     @PostMapping("create")

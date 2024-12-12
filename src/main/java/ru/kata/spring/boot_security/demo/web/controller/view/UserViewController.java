@@ -8,23 +8,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.dal.repositories.UserRepository;
+import ru.kata.spring.boot_security.demo.web.controller.api.UserAPIController;
+import ru.kata.spring.boot_security.demo.web.decorators.UserDecorator;
 
 import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
 public class UserViewController {
-    private final UserRepository userRepository;
+    private final UserAPIController userAPI;
 
     @Autowired
-    public UserViewController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserViewController(UserAPIController userAPI) {
+        this.userAPI = userAPI;
     }
 
     @GetMapping
     public String getAboutUserPage(ModelMap modelMap, Principal principal) {
-        User user = userRepository.findByEmail(principal.getName());
-        modelMap.addAttribute("user", user);
+        User user = userAPI.getUserByEmail(principal.getName());
+        modelMap.addAttribute("currentUser", UserDecorator.of(user));
         return "user/aboutUser";
     }
 }

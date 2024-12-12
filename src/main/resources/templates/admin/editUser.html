@@ -4,57 +4,80 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit User</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Edit user</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body>
-<h1 th:text="User_+${user.getId()}"></h1>
-<form th:action="@{/api/users/update/{id}(id = ${user.getId()})}" th:method="POST" th:object="${user}">
-    <input type="hidden" name="_method" value="POST">
-    <table>
-        <tr>
-            <td><label for="name">Name</label></td>
-            <td><input type="text" name="name" id="name" th:field="*{name} "></td>
-            <td style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></td>
-        </tr>
-        <tr>
-            <td><label for="name">Lastname</label></td>
-            <td><input type="text" name="last-name" id="last-name" th:field="*{lastname}"></td>
-            <td style="color:red" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></td>
-        </tr>
-        <tr>
-            <td><label for="age">Age</label></td>
-            <td><input type="number" name="age" id="age" th:field="*{age}"></td>
-            <td style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></td>
-        </tr>
-        <tr>
-            <td><label for="email">Email</label></td>
-            <td><input type="email" name="email" id="email" th:field="*{email}"></td>
-            <td style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></td>
-        </tr>
-        <tr>
-            <td><label for="password">Password</label></td>
-            <td><input type="password" name="password" id="password" th:value="${user.getPassword()}"></td>
-            <td style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
-        </tr>
-        <tr>
-            <td><label>Role</label></td>
-            <td>
-                <select multiple="multiple"  th:field="*{role}" >
+<body class="bg-light">
+<!--  NAVBAR  -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="collapse navbar-collapse">
+        <a class="navbar-brand mr-auto" href="#">field@for.email with roles: ROLE_1 ROLE_2</a>
+        <a class="btn btn-outline-danger" role="button" href="/logout">Logout</a>
+    </div>
+</nav>
+<div class="container bg-white pb-3 pt-3">
+    <div class="row justify-content-md-center">
+        <h1 th:text="'User '+${user.getId()}"></h1>
+    </div>
+    <form th:action="@{/api/users/update/{id}(id = ${user.getId()})}" th:method="POST" th:object="${user}">
+        <input type="hidden" name="_method" value="POST">
+        <div class="">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" th:field="*{name}" class="form-control" placeholder="Name">
+                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Lastname</label>
+                <input type="text" name="last-name" id="last-name" th:field="*{lastname}" class="form-control"
+                       placeholder="Lastname">
+                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
+            </div>
+
+            <div class="form-group ">
+                <label for="age">Age</label>
+                <input type="number" name="age" id="age" th:field="*{age}" class="form-control" placeholder="Age" min="14" max="127">
+                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+            </div>
+
+            <div class="form-group ">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" th:field="*{email}" class="form-control "
+                       placeholder="Email">
+                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+
+            <div class="form-group ">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" th:value="*{password}" class="form-control"
+                       placeholder="Password">
+                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            </div>
+
+            <div class="form-group ">
+                <label for="role">Role</label>
+                <select multiple="multiple" th:field="*{role}" class="form-control" size="2">
                     <option th:each="role : ${roles}"
                             th:value="${role.getId()}"
                             th:text="${role.getName()}"
-                            th:selected="${user.role.contains(role)}"></option>
-                </select><br/>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
+                            th:selected="${user.role != null}? ${user.role.contains(role)}"></option>
+                </select>
+                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
+            </div>
+
+            <div class="form-group mb-0">
                 <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                <button type="submit" value="Save">Save </button>
-            </td>
-        </tr>
-    </table>
-</form>
+                <button type="submit" class="btn btn-primary" value="Save">Save</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+<!--LiveReload-->
+<script>
+    document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
+</script>
 </body>
 </html>

@@ -16,6 +16,8 @@ public interface UserAPIController {
 
     User getUserByID(Long id);
 
+    User getUserByEmail(String email);
+
     String updateUser(User user, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
     String deleteUser(Long id);

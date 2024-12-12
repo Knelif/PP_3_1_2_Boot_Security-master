@@ -29,7 +29,6 @@ public class Role implements GrantedAuthority {
 
     @Column(name = "name", unique = true)
     @NotNull
-    //TODO: Think about using role.name as primary key
     @Size(min = 3, max = 255, message = "The role's name must be between 3 and 255 characters and be unique.")
     private String name;
 

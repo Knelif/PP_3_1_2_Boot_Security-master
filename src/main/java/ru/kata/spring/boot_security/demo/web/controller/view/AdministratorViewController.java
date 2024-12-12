@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.web.controller.api.UserAPIController;
+import ru.kata.spring.boot_security.demo.web.decorators.UserDecorator;
+
+import java.security.Principal;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -24,8 +28,10 @@ public class AdministratorViewController {
 
 
     @GetMapping(value = "")
-    public String getViewUserListPage(ModelMap modelMap) {
-        modelMap.addAttribute("userList", userAPI.getUserList());
+    public String getViewUserListPage(ModelMap modelMap, Principal principal) {
+        User user = userAPI.getUserByEmail(principal.getName());
+        modelMap.addAttribute("currentUser", UserDecorator.of(user));
+        modelMap.addAttribute("userList", userAPI.getUserList().stream().map(UserDecorator::of).collect(Collectors.toList()));
         return "admin/allUsers";
     }
 
@@ -44,6 +50,7 @@ public class AdministratorViewController {
                                   @RequestParam(defaultValue = "-1") Long id) {
         if (!model.containsAttribute("user")) model.addAttribute("user", userAPI.getUserByID(id));
         model.addAttribute("roles", userAPI.getAllRoles());
+        System.out.println(model);
         return "admin/editUser";
     }
 }

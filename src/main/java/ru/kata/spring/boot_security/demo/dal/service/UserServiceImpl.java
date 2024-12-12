@@ -35,8 +35,11 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    //TODO: Правильно ли?
     public void updateUser(User user) {
-        encodePassword(user);
+        User oldUser = userDAO.getUserById(user.getId());
+        if(!passwordEncoder.matches(user.getPassword(), oldUser.getPassword()) && !user.getPassword().equals(oldUser.getPassword())) encodePassword(user);
+        else user.setPassword(oldUser.getPassword());
         userDAO.updateUser(user);
     }
 
