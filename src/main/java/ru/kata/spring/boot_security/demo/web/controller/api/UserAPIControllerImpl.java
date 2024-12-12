@@ -52,33 +52,20 @@ public class UserAPIControllerImpl implements UserAPIController {
         return userService.getUserByEmail(email);
     }
 
-
     @Override
     @PostMapping("create")
-    public String createUser(@Valid @ModelAttribute("user") User user,
-                             BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) {
-        userValidator.validate(user,bindingResult);
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
-            redirectAttributes.addFlashAttribute("user", user);
+    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (isInvalidUser(user, bindingResult, redirectAttributes))
             return CREATE_USER_PAGE;
-        }
         userService.saveUser(user);
         return DEFAULT_PAGE;
     }
 
     @Override
     @PostMapping("update/{id}")
-    public String updateUser(@Valid @ModelAttribute("user") User user,
-                             BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) {
-        userValidator.validate(user,bindingResult);
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
-            redirectAttributes.addFlashAttribute("user", user);
+    public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (isInvalidUser(user, bindingResult, redirectAttributes))
             return String.format("%s?id=%d", UPDATE_USER_PAGE, user.getId());
-        }
         userService.updateUser(user);
         return DEFAULT_PAGE;
     }
@@ -95,4 +82,12 @@ public class UserAPIControllerImpl implements UserAPIController {
         return roleRepository.findAll();
     }
 
+    private boolean isInvalidUser(User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        userValidator.validate(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
+            redirectAttributes.addFlashAttribute("user", user);
+        }
+        return bindingResult.hasErrors();
+    }
 }
