@@ -4,7 +4,6 @@ package ru.kata.spring.boot_security.demo.web.controller.api;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,6 +15,7 @@ import ru.kata.spring.boot_security.demo.dal.model.Role;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.dal.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.dal.service.UserService;
+import ru.kata.spring.boot_security.demo.dal.validator.UserValidator;
 
 import java.util.List;
 
@@ -24,15 +24,17 @@ import java.util.List;
 public class UserAPIControllerImpl implements UserAPIController {
     private final UserService userService;
     private final RoleRepository roleRepository;
+    private final UserValidator userValidator;
     private static final String DEFAULT_PAGE = "redirect:/";
     private static final String CREATE_USER_PAGE = "redirect:/admin/createUser";
     private static final String UPDATE_USER_PAGE = "redirect:/admin/editUser";
     private static final String ERROR_API_PAGE = "redirect:/apiError";
 
     @Autowired
-    public UserAPIControllerImpl(UserService userService, RoleRepository roleRepository) {
+    public UserAPIControllerImpl(UserService userService, RoleRepository roleRepository, UserValidator userValidator) {
         this.userService = userService;
         this.roleRepository = roleRepository;
+        this.userValidator = userValidator;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class UserAPIControllerImpl implements UserAPIController {
     public String createUser(@Valid @ModelAttribute("user") User user,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
+        userValidator.validate(user,bindingResult);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
             redirectAttributes.addFlashAttribute("user", user);
@@ -70,6 +73,7 @@ public class UserAPIControllerImpl implements UserAPIController {
     public String updateUser(@Valid @ModelAttribute("user") User user,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
+        userValidator.validate(user,bindingResult);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
             redirectAttributes.addFlashAttribute("user", user);

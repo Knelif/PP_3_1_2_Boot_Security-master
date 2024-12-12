@@ -26,34 +26,33 @@
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" th:field="*{name}" class="form-control" placeholder="Name">
-                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                <div class="badge badge-danger mt-1" role="alert" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
 
             <div class="form-group">
                 <label for="name">Lastname</label>
                 <input type="text" name="last-name" id="last-name" th:field="*{lastname}" class="form-control"
                        placeholder="Lastname">
-                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
+                <div class="badge badge-danger mt-1" role="alert" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
             </div>
 
             <div class="form-group ">
                 <label for="age">Age</label>
                 <input type="number" name="age" id="age" th:field="*{age}" class="form-control" placeholder="Age" min="14" max="127">
-                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+                <div class="badge badge-danger mt-1" role="alert" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
             </div>
 
             <div class="form-group ">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" th:field="*{email}" class="form-control "
+                <input type="email" name="email" id="email" th:field="*{email}" class="form-control"
                        placeholder="Email">
-                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                <div class="badge badge-danger mt-1" role="alert" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
             <div class="form-group ">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" th:value="*{password}" class="form-control"
-                       placeholder="Password">
-                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                <input type="password" name="password" id="password" th:value="*{password}" class="form-control" placeholder="Password">
+                <div class="badge badge-danger mt-1" role="alert" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
             </div>
 
             <div class="form-group ">
@@ -64,7 +63,7 @@
                             th:text="${role.getName()}"
                             th:selected="${user.role != null}? ${user.role.contains(role)}"></option>
                 </select>
-                <div class="alert alert-danger m-1" role="alert" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
+                <div class="badge badge-danger mt-1" role="alert" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
             </div>
 
             <div class="form-group mb-0">
