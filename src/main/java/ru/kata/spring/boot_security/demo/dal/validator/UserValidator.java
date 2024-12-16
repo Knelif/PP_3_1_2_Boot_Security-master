@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.dal.validator;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -24,7 +26,12 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         User targetUser = (User) target;
-        User persistUser = userService.getUserByEmail(targetUser.getEmail());
+        User persistUser =null;
+        try {
+            persistUser = userService.getUserByEmail(targetUser.getEmail());
+        } catch (EntityNotFoundException | NoResultException enf){
+            return;
+        }
         if (persistUser == null) return;
         if (persistUser.getId().equals(targetUser.getId())) return;
         errors.rejectValue("email", "", "Another user already have this email");

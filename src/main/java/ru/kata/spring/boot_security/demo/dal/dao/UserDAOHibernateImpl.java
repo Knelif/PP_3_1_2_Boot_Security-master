@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.dal.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,15 @@ public class UserDAOHibernateImpl implements UserDAO {
     }
 
     @Override
-    public User getUserByEmail(String Email) throws EntityNotFoundException {
-        TypedQuery<User> query = entityManager.createQuery("FROM User WHERE email = :email", User.class);
-        query.setParameter("email", Email);
-        User user = query.getSingleResult();
-        if (user == null) throw new EntityNotFoundException(String.format("User with email %s not found", Email));
+    public User getUserByEmail(String email) throws EntityNotFoundException {
+        TypedQuery<User> query = entityManager.createQuery("FROM User u JOIN FETCH u.role WHERE u.email = :email", User.class);
+        query.setParameter("email", email);
+        User user = null;
+        try {
+            user = query.getSingleResult();
+        } catch (NoResultException nre) {
+            throw new EntityNotFoundException(String.format("User with email %s not found", email),nre);
+        }
         entityManager.detach(user);
         return user;
     }

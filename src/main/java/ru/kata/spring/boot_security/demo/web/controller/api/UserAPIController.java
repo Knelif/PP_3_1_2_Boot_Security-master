@@ -1,7 +1,5 @@
 package ru.kata.spring.boot_security.demo.web.controller.api;
 
-
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kata.spring.boot_security.demo.dal.model.Role;

@@ -32,6 +32,8 @@ public class AdministratorViewController {
         User user = userAPI.getUserByEmail(principal.getName());
         modelMap.addAttribute("currentUser", UserWrapper.of(user));
         modelMap.addAttribute("userList", userAPI.getUserList().stream().map(UserWrapper::of).collect(Collectors.toList()));
+        if (!modelMap.containsAttribute("user")) modelMap.addAttribute("user", new User());
+        modelMap.addAttribute("roles", userAPI.getAllRoles());
         return "admin/allUsers";
     }
 
@@ -40,7 +42,6 @@ public class AdministratorViewController {
     public String getCreateUserPage(Model model) {
         if (!model.containsAttribute("user")) model.addAttribute("user", new User());
         model.addAttribute("roles", userAPI.getAllRoles());
-        System.out.println(model);
         return "admin/createUser";
     }
 
