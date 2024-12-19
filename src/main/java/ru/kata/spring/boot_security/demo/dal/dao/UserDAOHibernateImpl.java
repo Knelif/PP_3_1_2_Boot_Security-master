@@ -32,8 +32,14 @@ public class UserDAOHibernateImpl implements UserDAO {
 
     @Override
     public User getUserById(Long id) throws EntityNotFoundException {
-        User user = entityManager.find(User.class, id);
-        if (user == null) throw new EntityNotFoundException(String.format("User with id %d not found", id));
+        TypedQuery<User> query = entityManager.createQuery("FROM User u JOIN FETCH u.role WHERE u.id = :id", User.class);
+        query.setParameter("id", id);
+        User user = null;
+        try {
+            user = query.getSingleResult();
+        } catch (NoResultException nre) {
+            throw new EntityNotFoundException(String.format("User with id %s not found", id),nre);
+        }
         entityManager.detach(user);
         return user;
     }
@@ -61,7 +67,7 @@ public class UserDAOHibernateImpl implements UserDAO {
 
     @Override
     public List<User> getUserList() {
-        return entityManager.createQuery("FROM User u JOIN FETCH u.role", User.class)
+        return entityManager.createQuery("FROM User u JOIN FETCH u.role order by u.id", User.class)
                 .getResultList();
     }
 

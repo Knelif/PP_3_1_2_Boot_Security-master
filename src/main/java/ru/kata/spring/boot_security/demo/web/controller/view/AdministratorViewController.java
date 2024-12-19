@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.web.controller.api.UserAPIController;
-import ru.kata.spring.boot_security.demo.web.wrappers.UserWrapper;
+import ru.kata.spring.boot_security.demo.web.dto.UserDTO;
 
 import java.security.Principal;
 import java.util.stream.Collectors;
@@ -29,29 +29,11 @@ public class AdministratorViewController {
 
     @GetMapping(value = "")
     public String getViewUserListPage(ModelMap modelMap, Principal principal) {
-        User user = userAPI.getUserByEmail(principal.getName());
-        modelMap.addAttribute("currentUser", UserWrapper.of(user));
-        modelMap.addAttribute("userList", userAPI.getUserList().stream().map(UserWrapper::of).collect(Collectors.toList()));
-        if (!modelMap.containsAttribute("user")) modelMap.addAttribute("user", new User());
+        UserDTO userDTO = userAPI.getUserByEmail(principal.getName());
+        modelMap.addAttribute("currentUser", userDTO);
+        modelMap.addAttribute("userList", userAPI.getUserList());
+        if (!modelMap.containsAttribute("user")) modelMap.addAttribute("user", new UserDTO());
         modelMap.addAttribute("roles", userAPI.getAllRoles());
-        return "admin/allUsers";
-    }
-
-
-    @GetMapping(value = "/createUser")
-    public String getCreateUserPage(Model model) {
-        if (!model.containsAttribute("user")) model.addAttribute("user", new User());
-        model.addAttribute("roles", userAPI.getAllRoles());
-        return "admin/createUser";
-    }
-
-
-    @GetMapping(value = "/editUser")
-    public String getEditUserPage(Model model,
-                                  @RequestParam(defaultValue = "-1") Long id) {
-        if (!model.containsAttribute("user")) model.addAttribute("user", userAPI.getUserByID(id));
-        model.addAttribute("roles", userAPI.getAllRoles());
-        System.out.println(model);
-        return "admin/editUser";
+        return "admin/adminPage.html";
     }
 }

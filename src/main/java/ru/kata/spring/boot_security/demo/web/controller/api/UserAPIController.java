@@ -1,24 +1,26 @@
 package ru.kata.spring.boot_security.demo.web.controller.api;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kata.spring.boot_security.demo.dal.model.Role;
-import ru.kata.spring.boot_security.demo.dal.model.User;
+import ru.kata.spring.boot_security.demo.web.dto.UserDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserAPIController {
-    String createUser(User user, BindingResult bindingResult, RedirectAttributes redirectAttributes);
+    List<UserDTO> getUserList();
 
-    List<User> getUserList();
+    UserDTO getUserByID(Long id);
 
-    User getUserByID(Long id);
+    UserDTO getUserByEmail(String email);
 
-    User getUserByEmail(String email);
+    ResponseEntity<HttpStatus>  createUser(UserDTO user, BindingResult bindingResult);
 
-    String updateUser(User user, BindingResult bindingResult, RedirectAttributes redirectAttributes);
+    ResponseEntity<HttpStatus> updateUser(UserDTO user, BindingResult bindingResult);
 
-    String deleteUser(Long id);
+    ResponseEntity<HttpStatus> deleteUser(Long id);
 
-    List<Role> getAllRoles();
+    Set<Role> getAllRoles();
 }

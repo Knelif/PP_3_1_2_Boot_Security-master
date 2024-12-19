@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.dal.model.User;
 import ru.kata.spring.boot_security.demo.web.controller.api.UserAPIController;
-import ru.kata.spring.boot_security.demo.web.wrappers.UserWrapper;
+import ru.kata.spring.boot_security.demo.web.dto.UserDTO;
 
 import java.security.Principal;
 
@@ -23,8 +23,8 @@ public class UserViewController {
 
     @GetMapping
     public String getAboutUserPage(ModelMap modelMap, Principal principal) {
-        User user = userAPI.getUserByEmail(principal.getName());
-        modelMap.addAttribute("currentUser", UserWrapper.of(user));
-        return "user/aboutUser";
+        UserDTO user = userAPI.getUserByEmail(principal.getName());
+        modelMap.addAttribute("currentUser", user);
+        return "user/userPage";
     }
 }
